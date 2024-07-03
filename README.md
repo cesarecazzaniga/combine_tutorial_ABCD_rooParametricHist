@@ -328,6 +328,7 @@ Using the output ```higgsCombineTest.FitDiagnostics.mH1500.root```, one can run 
 
 <details>
 <summary> Normalizations predictions </summary>
+  
 ```
 Channel                                  Process                                Pre-fit              S+B Fit           B-Only Fit
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -343,7 +344,7 @@ ch4                                      Bkg                                 146
 ```
 </details>
 
-Moreover, one can run the script ``````utils/postFitPlot.py``` to get pre-fit and post-fit plots in the signal region (in the combined datacard ```ch_4```).
+Moreover, one can run the script ```utils/postFitPlot.py``` to get pre-fit and post-fit plots in the signal region (in the combined datacard ```ch_4```).
 
 ![input distributions](docs/post_fit_plots_A.png)
 
