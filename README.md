@@ -28,6 +28,7 @@ From the input histograms, for each signal hypothesis, 4 datacards can be built,
 
 <details>
 <summary> Datacard Region A  </summary>
+  
 ```
 imax * number of bins 
 jmax * number of processes minus 1 
@@ -46,6 +47,7 @@ process                                 1                                       
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
 lumi                lnN                 -                                            1.0160000000
+
 ```
 
 </details>
