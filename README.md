@@ -130,7 +130,6 @@ lumi                lnN                 -                                       
 ```
 </details>
 
-```
 As an example, for each datacard, we have assigned a systematic uncertainty of 1.6% due to lumi to the signal processes, and a systematic of 5% to background in the SR (to take into account of non-closure of the method). 
 Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). In the following we show how to build the workspace.
 
@@ -139,6 +138,7 @@ First create a RooWorkspace, implement a function ```__get_histograms_regions```
 <details>
 <summary> Import histograms in workspace for signal and observed data  </summary>
   
+``` 
 #Output file and workspace
 output_file_ws =  TFile(card_output_directory+"param_ws.root","RECREATE")
 ws = RooWorkspace("wspace","wspace")
