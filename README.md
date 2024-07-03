@@ -46,7 +46,6 @@ process                                 1                                       
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
 lumi                lnN                 -                                            1.0160000000
-
 ```
 
 </details>
@@ -79,6 +78,7 @@ lumi                lnN                 -                                       
 
 <details>
 <summary> Datacard Region C  </summary>
+  
 ```
 imax * number of bins 
 jmax * number of processes minus 1 
@@ -104,6 +104,7 @@ lumi                lnN                 -                                       
 
 <details>
 <summary> Datacard Region D  </summary>
+  
 ```
 imax * number of bins 
 jmax * number of processes minus 1 
