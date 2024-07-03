@@ -320,7 +320,32 @@ lumi                    lnN     1.016     -         1.016     -         1.016   
 ## Run Fit
 <a id="fit"></a>
 
+From the combined datacard for all the regions, one can run the usual fit diagnostics as follows:
 
+```combine -M FitDiagnostics combinedExclusion_mPhi1500_2018.txt -m 1500 --saveShapes --saveWithUncertainties --saveNormalizations```
+
+Using the output ```higgsCombineTest.FitDiagnostics.mH1500.root```, one can run the script ```utils/mlfitNormsToText.py``` to get the predictions for the normalizations.
+
+<details>
+<summary> Normalizations predictions </summary>
+```
+Channel                                  Process                                Pre-fit              S+B Fit           B-Only Fit
+---------------------------------------------------------------------------------------------------------------------------------
+ch1                                      mPhi1500                               615.153                0.036                0.000
+ch2                                      mPhi1500                               588.446                0.034                0.000
+ch3                                      mPhi1500                               233.459                0.014                0.000
+ch4                                      mPhi1500                              1563.698                0.092                0.000
+ch1                                      Bkg                                 235694.916           235691.655           235690.631
+ch2                                      Bkg                                 237436.123           237432.755           237431.725
+ch3                                      Bkg                                 382527.975           382533.256           382531.586
+ch4                                      Bkg                                 146323.145           144860.251           144857.582
+
+```
+</details>
+
+Moreover, one can run the script ``````utils/postFitPlot.py``` to get pre-fit and post-fit plots in the signal region (in the combined datacard ```ch_4```).
+
+![input distributions](docs/post_fit_plots_A.png)
 
 ## Produce limits
 <a id="limits"></a>
