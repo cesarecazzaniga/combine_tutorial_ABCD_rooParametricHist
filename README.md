@@ -272,11 +272,49 @@ getattr(ws, "import")(param_hist_A_region, RooFit.Rename(process+"_A"))
 getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename(process+"_A"+"_norm"),RooFit.RecycleConflictNodes())
 
 ```
-<details>
+</details>
 
+The datacards can be combined then using the usual command:
 
-The datacards can be combined then using :
 ```combineCards.py mPhi1500_*2018*.txt > combinedExclusion_mPhi1500_2018.txt```
+
+<details>
+<summary> Datacard with A,B,C,D regions combined  </summary>
+
+```
+Combination of mPhi1500_Catany_2018_CR_B.txt  mPhi1500_Catany_2018_CR_C.txt  mPhi1500_Catany_2018_CR_D.txt  mPhi1500_Catany_2018_SR.txt
+imax 4 number of bins
+jmax 1 number of processes minus 1
+kmax 2 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes Bkg       ch1       param_ws.root wspace:bkg_B
+shapes data_obs  ch1       param_ws.root wspace:data_obs_B
+shapes mPhi1500  ch1       param_ws.root wspace:mPhi1500_B
+shapes Bkg       ch2       param_ws.root wspace:bkg_C
+shapes data_obs  ch2       param_ws.root wspace:data_obs_C
+shapes mPhi1500  ch2       param_ws.root wspace:mPhi1500_C
+shapes Bkg       ch3       param_ws.root wspace:bkg_D
+shapes data_obs  ch3       param_ws.root wspace:data_obs_D
+shapes mPhi1500  ch3       param_ws.root wspace:mPhi1500_D
+shapes Bkg       ch4       param_ws.root wspace:bkg_A
+shapes data_obs  ch4       param_ws.root wspace:data_obs_A
+shapes mPhi1500  ch4       param_ws.root wspace:mPhi1500_A
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1    ch2    ch3    ch4  
+observation  -1     -1     -1     -1   
+----------------------------------------------------------------------------------------------------------------------------------
+bin                             ch1       ch1       ch2       ch2       ch3       ch3       ch4       ch4     
+process                         mPhi1500  Bkg       mPhi1500  Bkg       mPhi1500  Bkg       mPhi1500  Bkg     
+process                         0         1         0         1         0         1         0         1       
+rate                            -1        1         -1        1         -1        1         -1        1       
+----------------------------------------------------------------------------------------------------------------------------------
+BkgRate                 lnN     -         -         -         -         -         -         -         1.05    
+lumi                    lnN     1.016     -         1.016     -         1.016     -         1.016     -
+
+
+```
+</details>
+
 
 
 ## Run Fit
@@ -286,4 +324,13 @@ The datacards can be combined then using :
 
 ## Produce limits
 <a id="limits"></a>
+
+Limits can be computed from the combined datacard for all the regions using the following command (in case of asymptotic limits):
+
+```combine -M -n combinedExclusion_mPhi1500_2018 -m 1500  combinedExclusion_mPhi1500_2018.txt  2>&1 | tee  asymp_limits_mPhi1500_2018.txt```
+
+Both the observed (from nominal Monte Carlo) and the expected limits are computed for each mass point. The same exercise can be repeated generating a workspace where the control regions are depleted from the signal (see datacards [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards/no_sgn_CRs) ), and re-running the limits. This should give a hint of how much the signal contamination in the control regions is worsening the limits.  
+
+![input distributions](docs/limits.png)
+
 
