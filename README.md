@@ -333,4 +333,5 @@ Both the observed (from nominal Monte Carlo) and the expected limits are compute
 
 <img src="docs/limits.png" width="600" />
 
+As we can see the expected limit without signal in the control regions is better compared to the one taking into account the signal, showing that in this example there is an impact from the signal contamination of the control regions affecting the final sensitivity. Instead, the observed line is showing the impact of the non-closure of the ABCD method: mainly the background is overestimated, thus leading to slightly worse expected limits (equivalent to an underfluctuation of the data).
 
