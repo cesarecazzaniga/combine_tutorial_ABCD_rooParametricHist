@@ -28,8 +28,7 @@ From the input histograms, for each signal hypothesis, 4 datacards can be built,
 
 <details>
 <summary> Datacard Region A  </summary>
-```
-imax * number of bins 
+```imax * number of bins 
 jmax * number of processes minus 1 
 kmax * number of nuisance parameters
 -----------------------------------------------------------------------------------
@@ -45,14 +44,12 @@ process                                 Bkg                                     
 process                                 1                                           0                                          
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
-lumi                lnN                 -                                            1.0160000000                                 
-```
+lumi                lnN                 -                                            1.0160000000```
 </details>
 
 <details>
 <summary> Datacard Region B  </summary>
-```
-imax * number of bins 
+```imax * number of bins 
 jmax * number of processes minus 1 
 kmax * number of nuisance parameters
 -----------------------------------------------------------------------------------
@@ -68,14 +65,12 @@ process                                 Bkg                                     
 process                                 1                                           0                                          
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
-lumi                lnN                 -                                          1.0160000000 
-```
+lumi                lnN                 -                                          1.0160000000```
 </details>
 
 <details>
 <summary> Datacard Region C  </summary>
-```
-imax * number of bins 
+```imax * number of bins 
 jmax * number of processes minus 1 
 kmax * number of nuisance parameters
 -----------------------------------------------------------------------------------
@@ -91,14 +86,12 @@ process                                 Bkg                                     
 process                                 1                                           0                                          
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
-lumi                lnN                 -                                          1.0160000000 
-```
+lumi                lnN                 -                                          1.0160000000```
 </details>
 
 <details>
 <summary> Datacard Region D  </summary>
-```
-imax * number of bins 
+```imax * number of bins 
 jmax * number of processes minus 1 
 kmax * number of nuisance parameters
 -----------------------------------------------------------------------------------
@@ -114,8 +107,7 @@ process                                 Bkg                                     
 process                                 1                                           0                                          
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
-lumi                lnN                 -                                          1.0160000000 
-```
+lumi                lnN                 -                                          1.0160000000```
 </details>
 
 As an example, for each datacard, we have assigned a systematic uncertainty due to lumi to the signal processes, while no systematic on the background.
