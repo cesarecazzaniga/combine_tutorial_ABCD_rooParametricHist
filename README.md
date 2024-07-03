@@ -3,7 +3,7 @@ tutorial for Combine using RooParamertricHist to perform the ABCD method
 
 ## Introduction
 The goal of this tutorial is to exemplify the usage of ```RooParametricHist``` in [CMS Combine](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/) to implement a bin-by-bin ABCD method.
-In this tutorial we will work with a toy example that could resamble a real physics analysis case. We consider the search for a BSM particle $\Phi$ with a mass range between 1500 and 5000 GeV that leads some excess in the tails of an observable $z$ (which could be $p_{T,\mathrm{miss}}$ ). We assume that we have found two uncorrelated discriminating features $x$ and $y$ that can be used to build the ABCD plane (the regions A,B,C,D will be defined by cutting on $x,y$), and we assume that $z$ is uncorrelated with respect to these two features. In this way, binning the variable $z$ in the same way in the regions A,B,C,D, per-bin transfer factors in the $z$ variable can be derived with the ABCD method to obtain the estimate of the background in the signal region.
+In this tutorial we will work with a toy example that could resamble a real physics analysis case. We consider the search for a BSM particle $\Phi$ with a mass range between 1500 and 5000 GeV that leads some excess in the tails of an observable $z$ (which could be $p_{T,\mathrm{miss}}$ ). We assume that we have found two uncorrelated discriminating features $x$ and $y$ that can be used to build the ABCD plane (the regions A,B,C,D will be defined by cutting on $x,y$), and we assume that $z$ is uncorrelated with respect to these two features. In this way, binning the variable $z$ in the same way in the regions A,B,C,D, per-bin transfer factors in the $z$ variable can be derived with the ABCD method to obtain the estimate of the background in the signal region. In our example we will call ```data``` the nominal background distribution we have generated, and the background will be estimated from these data from the control regions B,C,D and compared to data in the Signal Region A.
 
 The tutorial has 4 main parts:
 
@@ -47,6 +47,7 @@ process                                 1                                       
 rate                                    1                                           -1                                         
 -----------------------------------------------------------------------------------
 lumi                lnN                 -                                            1.0160000000
+BkgRate             lnN                 1.05                                         - 
 
 ```
 
@@ -129,7 +130,13 @@ lumi                lnN                 -                                       
 ```
 </details>
 
-As an example, for each datacard, we have assigned a systematic uncertainty due to lumi to the signal processes, while no systematic on the background.
+As an example, for each datacard, we have assigned a systematic uncertainty of 1.6% due to lumi to the signal processes, and a systematic of 5% to background in the SR (to take into account of non-closure of the method). 
+Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes). In the following we show how to build the workspace:
+
+
+
+The datacards can be combined then using :
+```combineCards.py mPhi1500_*2018*.txt > combinedExclusion_mPhi1500_2018.txt```
 
 
 ## Run Fit
