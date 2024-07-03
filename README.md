@@ -266,7 +266,7 @@ for binAB_i in process_AB_region_bins_list:
 
 
 #Create parametric histogram for signal region (A)   
-param_hist_A_region = RooParametricHist(process+"_A", "Background PDF in A region",variable_z,process_AB_region_bins,histA_pr)
+param_hist_A_region = RooParametricHist(process+"_A", "Background PDF in A region",variable_z,process_AB_region_bins,histB_pr)
 param_bkg_A_norm = RooAddition(process+"_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
 getattr(ws, "import")(param_hist_A_region, RooFit.Rename(process+"_A"))
 getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename(process+"_A"+"_norm"),RooFit.RecycleConflictNodes())
