@@ -343,7 +343,7 @@ ch4                                      Bkg                                 146
 ```
 </details>
 
-Moreover, one can run the script ``````utils/postFitPlot.py``` to get pre-fit and post-fit plots in the signal region (in the combined datacard ```ch_4```).
+Moreover, one can run the script ```utils/postFitPlot.py``` to get pre-fit and post-fit plots in the signal region (in the combined datacard ```ch_4```).
 
 ![input distributions](docs/post_fit_plots_A.png)
 
