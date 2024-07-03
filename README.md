@@ -328,6 +328,7 @@ Using the output ```higgsCombineTest.FitDiagnostics.mH1500.root```, one can run 
 
 <details>
 <summary> Normalizations predictions </summary>
+  
 ```
 Channel                                  Process                                Pre-fit              S+B Fit           B-Only Fit
 ---------------------------------------------------------------------------------------------------------------------------------
