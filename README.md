@@ -331,6 +331,6 @@ Limits can be computed from the combined datacard for all the regions using the 
 
 Both the observed (from nominal Monte Carlo) and the expected limits are computed for each mass point. The same exercise can be repeated generating a workspace where the control regions are depleted from the signal (see datacards [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards/no_sgn_CRs) ), and re-running the limits. This should give a hint of how much the signal contamination in the control regions is worsening the limits.  
 
-<img src="docs/limits.png" width="200" />
+<img src="docs/limits.png" width="600" />
 
 
