@@ -1,7 +1,7 @@
  <<< Combine >>> 
 >>> random number generator seed is 123456
 >>> method used is AsymptoticLimits
-COMBINE_OUTPUT_FILE: higgsCombinecombinedExclusion_mPhi3000_2018.AsymptoticLimits.mH3000.root
+COMBINE_OUTPUT_FILE: higgsCombinecombinedExclusion_mPhi5000_2018.AsymptoticLimits.mH5000.root
 Object bkg_AB_region_bin_1 is duplicated
 Object TF1 is duplicated
 Object bkg_AB_region_bin_2 is duplicated
@@ -28,11 +28,11 @@ Object bkg_AB_region_bin_12 is duplicated
 Object TF12 is duplicated
 
  -- AsymptoticLimits ( CLs ) --
-Observed Limit: r < 10.3486
-Expected  2.5%: r < 6.6174
-Expected 16.0%: r < 8.7932
-Expected 50.0%: r < 12.1875
-Expected 84.0%: r < 16.9483
-Expected 97.5%: r < 22.5263
+Observed Limit: r < 49.4792
+Expected  2.5%: r < 27.7539
+Expected 16.0%: r < 36.7368
+Expected 50.0%: r < 50.7500
+Expected 84.0%: r < 69.9677
+Expected 97.5%: r < 92.0452
 
-Done in 0.02 min (cpu), 0.02 min (real)
+Done in 0.03 min (cpu), 0.03 min (real)

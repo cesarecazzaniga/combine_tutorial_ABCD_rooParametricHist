@@ -28,11 +28,11 @@ Object bkg_AB_region_bin_12 is duplicated
 Object TF12 is duplicated
 
  -- AsymptoticLimits ( CLs ) --
-Observed Limit: r < 18.9996
-Expected  2.5%: r < 13.1733
-Expected 16.0%: r < 17.5734
-Expected 50.0%: r < 24.4375
-Expected 84.0%: r < 33.9836
-Expected 97.5%: r < 45.1681
+Observed Limit: r < 20.2585
+Expected  2.5%: r < 13.8086
+Expected 16.0%: r < 18.2779
+Expected 50.0%: r < 25.2500
+Expected 84.0%: r < 34.9122
+Expected 97.5%: r < 46.1973
 
 Done in 0.02 min (cpu), 0.02 min (real)
