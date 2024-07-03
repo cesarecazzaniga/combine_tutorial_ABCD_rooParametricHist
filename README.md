@@ -130,6 +130,7 @@ lumi                lnN                 -                                       
 ```
 </details>
 
+```
 As an example, for each datacard, we have assigned a systematic uncertainty of 1.6% due to lumi to the signal processes, and a systematic of 5% to background in the SR (to take into account of non-closure of the method). 
 Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). In the following we show how to build the workspace.
 
@@ -173,6 +174,7 @@ getattr(ws, "import")(histSgn_B, RooFit.Rename(signal+"_B"))
 getattr(ws, "import")(histSgn_C, RooFit.Rename(signal+"_C"))
 getattr(ws, "import")(histSgn_D, RooFit.Rename(signal+"_D"))
 
+```
 </details>
 
 For B,C,D regions, create a ```RooParametricHist``` object, storing the content of the background bins in B,C,D as ```RooRealVar``` :
@@ -180,6 +182,7 @@ For B,C,D regions, create a ```RooParametricHist``` object, storing the content 
 <details>
 <summary> Create RooParametricHist for control regions background templates  </summary>
 
+```
 #get the background histograms  
 histA_pr , histB_pr, histC_pr, histD_pr =  __get_histograms_regions(channel, process, input_file)        
 
@@ -236,13 +239,16 @@ param_hist_D_region = RooParametricHist(process+"_D", "Background PDF in D regio
 param_Bkg_D_norm = RooAddition(process+"_D"+"_norm","Total Number of events from background in control region D",process_D_region_bins)
 getattr(ws, "import")(param_hist_D_region, RooFit.Rename(process+"_D"))
 getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename(process+"_D"+"_norm"),RooFit.RecycleConflictNodes())
+
+```
 </details>
 
-For the signal region A, create a ```RooParamtricHist``` with each bin made from a ```RooFormulaVar``` relating the C,D,B regions to A via the ABCD formula ($N_A = N_B \times (N_C/N_D)$) . 
+For the signal region A, create a ```RooParamtricHist``` with each bin made from a ```RooFormulaVar``` relating the C,D,B regions to A via the ABCD formula. 
 
 <details>
 <summary> Create RooParametricHist for SR background template  </summary>
-  
+
+```
 #Relate SR (A) to control region B via transfer factors
 process_AB_region_bins = RooArgList()
 TF_list = []
@@ -264,6 +270,8 @@ param_hist_A_region = RooParametricHist(process+"_A", "Background PDF in A regio
 param_bkg_A_norm = RooAddition(process+"_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
 getattr(ws, "import")(param_hist_A_region, RooFit.Rename(process+"_A"))
 getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename(process+"_A"+"_norm"),RooFit.RecycleConflictNodes())
+
+```
 <details>
 
 
