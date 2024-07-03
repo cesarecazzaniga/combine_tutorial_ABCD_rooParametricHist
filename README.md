@@ -238,7 +238,7 @@ getattr(ws, "import")(param_hist_D_region, RooFit.Rename(process+"_D"))
 getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename(process+"_D"+"_norm"),RooFit.RecycleConflictNodes())
 </details>
 
-For the signal region A, create a ```RooParamtricHist``` with each bin made from a ```RooFormulaVar``` relating the C,D,B regions to A via the ABCD formula ($N_A = N_B \cdot (N_C/N_D)$) . 
+For the signal region A, create a ```RooParamtricHist``` with each bin made from a ```RooFormulaVar``` relating the C,D,B regions to A via the ABCD formula ($N_A = N_B \times (N_C/N_D)$) . 
 
 <details>
 <summary> Create RooParametricHist for SR background template  </summary>
