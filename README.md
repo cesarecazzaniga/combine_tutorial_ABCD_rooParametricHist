@@ -21,10 +21,14 @@ The histograms for the $z$ observable in the different regions A,B,C,D can be pr
 
 The ABCD boundaries are chosen in the example to be $(0.5,0.5)$, and A is defined as the signal region, while the others are control regions used for the estimation of the background. From the example provided, the signal contamination in the control regions is expected to be low, and the non-closure of the background estimation to be small. The histograms for the different regions are saved in separate root files for each signal hypothesis and total background. 
 
+To generate your own input data, run: 
+
+```python utils/produce_input_histograms_and_analyse.py```
+
 ## Prepare Combine datacards 
 <a id="datacards"></a>
 
-From the input histograms, for each signal hypothesis, 4 datacards can be built, one for each region of the ABCD plane. Examples of the templates for the datacards (for a signal mass point at 1500 GeV) can be found in the following. All the example datacards are stored in the directory [datacards](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards). We consider for now the datacards stored in the directory ```no_sgn_CRs```, for which the signal is removed from the control regions.
+From the input histograms, for each signal hypothesis, 4 datacards can be built, one for each region of the ABCD plane. Examples of the templates for the datacards (for a signal mass point at 1500 GeV) can be found in the following. All the example datacards are stored in the directory [datacards](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards). We consider for now the datacards stored in the directory ```sgn_CRs```, for which the signal is present in the control regions.
 Let's take as an example the cards for the $m_{\Phi} = 1500$ in the [directory](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards/no_sgn_CRs/mPhi1500):
 
 <details>
@@ -132,8 +136,9 @@ lumi                lnN                 -                                       
 </details>
 
 As an example, for each datacard, we have assigned a systematic uncertainty of 1.6% due to lumi to the signal processes, and a systematic of 5% to background in the SR (to take into account of non-closure of the method). 
-Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). In the following we show how to build the workspace.
+Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). In the following we show how to build the workspace. 
 
+We follow the main steps implemented in a working code to create the workspace [create_workspace.py](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/blob/main/utils/create_workspace.py).
 First create a RooWorkspace, implement a function ```__get_histograms_regions``` to read the input histograms from the A,B,C,D regions and import them as ```RooDataHist``` in the workspace.
 
 <details>
@@ -141,15 +146,14 @@ First create a RooWorkspace, implement a function ```__get_histograms_regions```
   
 ``` 
 #Output file and workspace
-output_file_ws =  TFile(card_output_directory+"param_ws.root","RECREATE")
+output_file_ws =  ROOT.TFile(card_output_directory+"param_ws.root","RECREATE")
 ws = RooWorkspace("wspace","wspace")
 
 #Define a RooRealVar for the observable z to fit
 variable_z = RooRealVar( "z", "z", 200, 14000, "GeV")
 
-#Save data in RooDataHist
-histA_obs , histB_obs, histC_obs, histD_obs =  __get_histograms_regions(channel, "data_obs", input_file)
-
+#Save data in RooDataHist (here assume data is background)
+histA_obs , histB_obs, histC_obs, histD_obs =  __get_histograms_regions("bkg", input_file_bkg)
 
 histData_A = RooDataHist("data_obs_A", "Obs Data region A",  RooArgList(variable_z), histA_obs, 1.)
 histData_B = RooDataHist("data_obs_B", "Obs Data region B",  RooArgList(variable_z), histB_obs, 1.)
@@ -163,7 +167,7 @@ getattr(ws, "import")(histData_C, RooFit.Rename("data_obs_C"))
 getattr(ws, "import")(histData_D, RooFit.Rename("data_obs_D"))
 
 #Save signals in RooDataHist
-histA_sgn , histB_sgn, histC_sgn, histD_sgn =  __get_histograms_regions(channel, signal, input_file)
+histA_sgn , histB_sgn, histC_sgn, histD_sgn =  __get_histograms_regions("sgn", input_file_sgn)
 histSgn_A = RooDataHist(signal+"_A", "Sgn Data region A",  RooArgList(variable_z), histA_sgn, 1.)
 histSgn_B = RooDataHist(signal+"_B", "Sgn Data region B",  RooArgList(variable_z), histB_sgn, 1.)
 histSgn_C = RooDataHist(signal+"_C", "Sgn Data region C",  RooArgList(variable_z), histC_sgn, 1.)
@@ -184,8 +188,8 @@ For B,C,D regions, create a ```RooParametricHist``` object, storing the content 
 <summary> Create RooParametricHist for control regions background templates  </summary>
 
 ```
-#get the background histograms  
-histA_pr , histB_pr, histC_pr, histD_pr =  __get_histograms_regions(channel, process, input_file)        
+#here we define the background histograms from "data" (which in our case is equal to the background), they will be used to build the parametric histograms  
+histA_pr , histB_pr, histC_pr, histD_pr =  __get_histograms_regions("bkg", input_file_bkg)        
 
 #bins for RooParametricHist used for transfer region
 process_B_region_bins = RooArgList()
@@ -200,7 +204,7 @@ process_D_region_bins_list = []
 
 #Add yields in B Region per each bin (including overflow) as RooRealVar in RooArgList - B region is assumed to be the Control region to be related to A (SR)                                                                                                
 for i in range(1,histB_obs.GetNbinsX()+1):
-    bin_B_i = RooRealVar(process+"_B_region_bin_"+str(i),"Background yield in control region B bin " + str(i),histB_obs.GetBinContent(i),0.,2.0*histB_obs.GetBinContent(i))
+    bin_B_i = RooRealVar("Bkg_B_region_bin_"+str(i),"Background yield in control region B bin " + str(i),histB_obs.GetBinContent(i),0.,2.0*histB_obs.GetBinContent(i))
     process_B_region_bins_list.append(bin_B_i)
 
 
@@ -209,14 +213,14 @@ for idx,binB_i in enumerate(process_B_region_bins_list):
 
 #Add yields in C and D Region as RooRealVar in RooArgList (C and D regions are used to compute the transfer factor)
 for i in range(1,histC_obs.GetNbinsX()+1):
-    bin_C_i = RooRealVar(process+"_C_region_bin_"+str(i),"Background yield in control region C bin " + str(i),histC_obs.GetBinContent(i),0.,2.0*histC_obs.GetBinContent(i))
+    bin_C_i = RooRealVar("Bkg_C_region_bin_"+str(i),"Background yield in control region C bin " + str(i),histC_obs.GetBinContent(i),0.,2.0*histC_obs.GetBinContent(i))
     process_C_region_bins_list.append(bin_C_i)
 
 for idx,binC_i in enumerate(process_C_region_bins_list):
     process_C_region_bins.add(binC_i)
 
 for i in range(1,histD_obs.GetNbinsX()+1):
-    bin_D_i = RooRealVar(process+"_D_region_bin_"+str(i),"Background yield in control region D bin " + str(i),histD_obs.GetBinContent(i),0.,2.0*histD_obs.GetBinContent(i))
+    bin_D_i = RooRealVar("Bkg_D_region_bin_"+str(i),"Background yield in control region D bin " + str(i),histD_obs.GetBinContent(i),0.,2.0*histD_obs.GetBinContent(i))
     process_D_region_bins_list.append(bin_D_i)
 
 for idx,binD_i in enumerate(process_D_region_bins_list):
@@ -224,22 +228,22 @@ for idx,binD_i in enumerate(process_D_region_bins_list):
 
 
 #Parametric histogram for control region B (transfering region, to be related via transfer factor to SR)
-param_hist_B_region = RooParametricHist(process+"_B", "Background PDF in B region",variable_z,process_B_region_bins,histB_pr)
-param_Bkg_B_norm = RooAddition(process+"_B"+"_norm","Total Number of events from background in control region B",process_B_region_bins)
-getattr(ws, "import")(param_hist_B_region, RooFit.Rename(process+"_B"))
-getattr(ws, "import")(param_Bkg_B_norm, RooFit.Rename(process+"_B"+"_norm"),RooFit.RecycleConflictNodes())
+param_hist_B_region = RooParametricHist("bkg_B", "Background PDF in B region",variable_z,process_B_region_bins,histB_pr)
+param_Bkg_B_norm = RooAddition("bkg_B"+"_norm","Total Number of events from background in control region B",process_B_region_bins)
+getattr(ws, "import")(param_hist_B_region, RooFit.Rename("bkg_B"))
+getattr(ws, "import")(param_Bkg_B_norm, RooFit.Rename("bkg_B"+"_norm"),RooFit.RecycleConflictNodes())
 
 #Parametric histograms for control regions C (used to compute transfer factor) 
-param_hist_C_region = RooParametricHist(process+"_C", "Background PDF in C region",variable_z,process_C_region_bins,histC_pr)
-param_Bkg_C_norm = RooAddition(process+"_C"+"_norm","Total Number of events from background in control region C",process_C_region_bins)
-getattr(ws, "import")(param_hist_C_region, RooFit.Rename(process+"_C"))
-getattr(ws, "import")(param_Bkg_C_norm, RooFit.Rename(process+"_C"+"_norm"),RooFit.RecycleConflictNodes())
+param_hist_C_region = RooParametricHist("bkg_C", "Background PDF in C region",variable_z,process_C_region_bins,histC_pr)
+param_Bkg_C_norm = RooAddition("bkg_C"+"_norm","Total Number of events from background in control region C",process_C_region_bins)
+getattr(ws, "import")(param_hist_C_region, RooFit.Rename("bkg_C"))
+getattr(ws, "import")(param_Bkg_C_norm, RooFit.Rename("bkg_C"+"_norm"),RooFit.RecycleConflictNodes())
 
 #Parametric histograms for control regions D (used to compute transfer factor)
-param_hist_D_region = RooParametricHist(process+"_D", "Background PDF in D region",variable_z,process_D_region_bins,histD_pr)
-param_Bkg_D_norm = RooAddition(process+"_D"+"_norm","Total Number of events from background in control region D",process_D_region_bins)
-getattr(ws, "import")(param_hist_D_region, RooFit.Rename(process+"_D"))
-getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename(process+"_D"+"_norm"),RooFit.RecycleConflictNodes())
+param_hist_D_region = RooParametricHist("bkg_D", "Background PDF in D region",variable_z,process_D_region_bins,histD_pr)
+param_Bkg_D_norm = RooAddition("bkg_D"+"_norm","Total Number of events from background in control region D",process_D_region_bins)
+getattr(ws, "import")(param_hist_D_region, RooFit.Rename("bkg_D"))
+getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename("bkg_D"+"_norm"),RooFit.RecycleConflictNodes())
 
 ```
 </details>
@@ -258,22 +262,31 @@ process_AB_region_bins_list = []
 
 #Compute per-bin transfer factor
 for i in range(1,histB_pr.GetNbinsX()+1):
-    TF_i = RooFormulaVar("TF"+str(i),"Transfer factor C/D bin " + str(i),"(@0/@1)",RooArgList(ws.obj(process+"_C_region_bin_"+str(i)) , ws.obj(process+"_D_region_bin_"+str(i)) ))
+    TF_i = RooFormulaVar("TF"+str(i),"Transfer factor C/D bin " + str(i),"(@0/@1)",RooArgList(ws.obj("Bkg_C_region_bin_"+str(i)) , ws.obj("Bkg_D_region_bin_"+str(i)) ))
     TF_list.append(TF_i)
-    bin_AB_i = RooFormulaVar(process+"_AB_region_bin_"+str(i),"Background yield in SR A region bin " + str(i), "@0*@1", RooArgList(TF_i, ws.obj(process+"_B_region_bin_"+str(i)) ))
+    bin_AB_i = RooFormulaVar("Bkg_AB_region_bin_"+str(i),"Background yield in SR A region bin " + str(i), "@0*@1", RooArgList(TF_i, ws.obj("Bkg_B_region_bin_"+str(i)) ))
     process_AB_region_bins_list.append(bin_AB_i)
 for binAB_i in process_AB_region_bins_list:
     process_AB_region_bins.add(binAB_i)
 
 
 #Create parametric histogram for signal region (A)   
-param_hist_A_region = RooParametricHist(process+"_A", "Background PDF in A region",variable_z,process_AB_region_bins,histB_pr)
-param_bkg_A_norm = RooAddition(process+"_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
-getattr(ws, "import")(param_hist_A_region, RooFit.Rename(process+"_A"))
-getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename(process+"_A"+"_norm"),RooFit.RecycleConflictNodes())
+param_hist_A_region = RooParametricHist("bkg_A", "Background PDF in A region",variable_z,process_AB_region_bins,histB_pr)
+param_bkg_A_norm = RooAddition("bkg_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
+getattr(ws, "import")(param_hist_A_region, RooFit.Rename("bkg_A"))
+getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename("bkg_A"+"_norm"),RooFit.RecycleConflictNodes())
 
 ```
 </details>
+
+To run the workspace creation script:
+
+```python utils/create_workspace.py -m 1500```
+
+where ```-m``` is the flag for the mass point you want to run the script on. The script will use by default the histograms stored in ```generated_histograms```. To use the ones that you created, change the path [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/blob/dc89f99a1c7a1f5705888ae00971176ec35463c5/utils/create_workspace.py#L49).
+After running the script, the workspace will be saved in ```example_analysis/datacards/```. To create the datacards automatically fatching the corret workspace, run:
+
+```python utils/create_datacards.py -m 1500```
 
 The datacards can be combined then using the usual command:
 
@@ -354,7 +367,7 @@ Moreover, one can run the script ```utils/postFitPlot.py``` to get pre-fit and p
 
 Limits can be computed from the combined datacard for all the regions using the following command (in case of asymptotic limits):
 
-```combine -M -n combinedExclusion_mPhi1500_2018 -m 1500  combinedExclusion_mPhi1500_2018.txt  2>&1 | tee  asymp_limits_mPhi1500_2018.txt```
+```combine -M AsymptoticLimits -n combinedExclusion_mPhi1500_2018 -m 1500  combinedExclusion_mPhi1500_2018.txt  2>&1 | tee  asymp_limits_mPhi1500_2018.txt```
 
 Both the observed (from nominal Monte Carlo) and the expected limits are computed for each mass point. The same exercise can be repeated generating a workspace where the control regions are depleted from the signal (see datacards [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards/no_sgn_CRs) ), and re-running the limits. This should give a hint of how much the signal contamination in the control regions is worsening the limits.  
 
