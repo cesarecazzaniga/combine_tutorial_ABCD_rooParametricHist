@@ -9,6 +9,7 @@ import optparse
 #add arguments
 parser = optparse.OptionParser(description="Option parser")
 parser.add_option('-m','--mass', dest='mass',help='Input mass point', default=1500,type=int)
+parser.add_option('--deplete_crs_from_signal', dest='deplete_crs_from_signal', help='Deplete the control regions from signal', action='store_true', default=False)
 (opt, args) = parser.parse_args()
 
 
@@ -38,21 +39,30 @@ def main():
 
     print ("Creating workspace for the analysis with mass point: ", opt.mass)
 
+    #depletion of control regions from signal
+    deplete_str = ""
+    if opt.deplete_crs_from_signal:
+        print ("Depleting control regions from signal")
+        deplete_str = "_depletedCRs"
+    else:
+        print ("No depletion of control regions from signal")
+        deplete_str = ""
+
     #get current directory
     current_directory = os.getcwd()
-    card_output_directory = current_directory + "/example_analysis/" + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
+    card_output_directory = current_directory + "/example_analysis%s/" % deplete_str + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
     #check if output directory exists, if not create it
     if not os.path.exists(card_output_directory):
         os.makedirs(card_output_directory)
     
     try:
-        input_file_bkg = ROOT.TFile.Open(current_directory+ "/generated_histograms/background.root")
+        input_file_bkg = ROOT.TFile.Open(current_directory + "/generated_histograms/background.root")
     except:
         print ("Error: Background file does not exist. Please generate first histogram for background.")
         exit()
     
     try:
-        input_file_sgn = ROOT.TFile.Open(current_directory+ "/generated_histograms/mPhi_%s.root"% int(opt.mass))
+        input_file_sgn = ROOT.TFile.Open(current_directory + "/generated_histograms/mPhi_%s.root"% int(opt.mass))
     except:
         print ("Error: Signal file does not exist. Please generate first histogram for mass point %s." % int(opt.mass))
         exit()
@@ -82,10 +92,26 @@ def main():
 
     #Save signals in RooDataHist
     histA_sgn , histB_sgn, histC_sgn, histD_sgn =  __get_histograms_regions("sgn", input_file_sgn)
+    #if depletion of control regions from signal is requested, we deplete the signal histograms in the control regions
+    if opt.deplete_crs_from_signal:
+        histB_sgn_scaled = histB_sgn.Clone()
+        histB_sgn_scaled.Scale(0.99)
+        histB_sgn.Add(histB_sgn_scaled, -1)
+
+        histC_sgn_scaled = histC_sgn.Clone()
+        histC_sgn_scaled.Scale(0.99)
+        histC_sgn.Add(histC_sgn_scaled, -1)
+
+        histD_sgn_scaled = histD_sgn.Clone()
+        histD_sgn_scaled.Scale(0.99)
+        histD_sgn.Add(histD_sgn_scaled, -1)
+
+
     histSgn_A = RooDataHist(signal+"_A", "Sgn Data region A",  RooArgList(variable_z), histA_sgn, 1.)
     histSgn_B = RooDataHist(signal+"_B", "Sgn Data region B",  RooArgList(variable_z), histB_sgn, 1.)
     histSgn_C = RooDataHist(signal+"_C", "Sgn Data region C",  RooArgList(variable_z), histC_sgn, 1.)
     histSgn_D = RooDataHist(signal+"_D", "Sgn Data region D",  RooArgList(variable_z), histD_sgn, 1.)
+
 
     #Import signals in workspace
     getattr(ws, "import")(histSgn_A, RooFit.Rename(signal+"_A"))

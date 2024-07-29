@@ -8,6 +8,7 @@ import optparse
 #add arguments
 parser = optparse.OptionParser(description="Option parser")
 parser.add_option('-m','--mass', dest='mass',help='Input mass point', default=1500,type=int)
+parser.add_option('--deplete_crs_from_signal', dest='deplete_crs_from_signal', help='Deplete the control regions from signal', action='store_true', default=False)
 (opt, args) = parser.parse_args()
 
 
@@ -16,9 +17,18 @@ def main():
 
     print ("Creating datacards for the analysis with mass point: ", opt.mass)
 
+    #depletion of control regions from signal
+    deplete_str = ""
+    if opt.deplete_crs_from_signal:
+        print ("Depleting control regions from signal")
+        deplete_str = "_depletedCRs"
+    else:
+        print ("No depletion of control regions from signal")
+        deplete_str = ""
+
     #get current directory
     current_directory = os.getcwd()
-    card_output_directory = current_directory + "/example_analysis/" + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
+    card_output_directory = current_directory + "/example_analysis%s/" % deplete_str + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
     #check if output directory exists, if not exit with error
     if not os.path.exists(card_output_directory):
        print ("Error: Directory does not exist. Please run create_workspace.py first.")
