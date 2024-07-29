@@ -21,6 +21,10 @@ The histograms for the $z$ observable in the different regions A,B,C,D can be pr
 
 The ABCD boundaries are chosen in the example to be $(0.5,0.5)$, and A is defined as the signal region, while the others are control regions used for the estimation of the background. From the example provided, the signal contamination in the control regions is expected to be low, and the non-closure of the background estimation to be small. The histograms for the different regions are saved in separate root files for each signal hypothesis and total background. 
 
+To generate your own input data, run: 
+
+```python utils/produce_input_histograms_and_analyse.py```
+
 ## Prepare Combine datacards 
 <a id="datacards"></a>
 
@@ -279,7 +283,8 @@ To run the workspace creation script:
 
 ```python utils/create_workspace.py -m 1500```
 
-where ```-m``` is the flag for the mass point you want to run the script on. After running the script, the workspace will be saved in ```example_analysis/datacards/```. To create the datacards automatically fatching the corret workspace, run:
+where ```-m``` is the flag for the mass point you want to run the script on. The script will use by default the histograms stored in ```generated_histograms```. To use the ones that you created, change the path [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/blob/dc89f99a1c7a1f5705888ae00971176ec35463c5/utils/create_workspace.py#L49).
+After running the script, the workspace will be saved in ```example_analysis/datacards/```. To create the datacards automatically fatching the corret workspace, run:
 
 ```python utils/create_datacards.py -m 1500```
 
