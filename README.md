@@ -28,7 +28,7 @@ To generate your own input data, run:
 ## Prepare Combine datacards 
 <a id="datacards"></a>
 
-From the input histograms, for each signal hypothesis, 4 datacards can be built, one for each region of the ABCD plane. Examples of the templates for the datacards (for a signal mass point at 1500 GeV) can be found in the following. All the example datacards are stored in the directory [datacards](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards). We consider for now the datacards stored in the directory ```no_sgn_CRs```, for which the signal is removed from the control regions.
+From the input histograms, for each signal hypothesis, 4 datacards can be built, one for each region of the ABCD plane. Examples of the templates for the datacards (for a signal mass point at 1500 GeV) can be found in the following. All the example datacards are stored in the directory [datacards](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards). We consider for now the datacards stored in the directory ```sgn_CRs```, for which the signal is present in the control regions.
 Let's take as an example the cards for the $m_{\Phi} = 1500$ in the [directory](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/tree/main/datacards/no_sgn_CRs/mPhi1500):
 
 <details>
