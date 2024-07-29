@@ -3,14 +3,30 @@
 
 import ROOT
 import os
+import optparse
+
+#add arguments
+parser = optparse.OptionParser(description="Option parser")
+parser.add_option('-m','--mass', dest='mass',help='Input mass point', default=1500,type=int)
+(opt, args) = parser.parse_args()
+
 
 #main code starting here
 def main():
 
-   #get current directory
+    print ("Creating datacards for the analysis with mass point: ", opt.mass)
+
+    #get current directory
     current_directory = os.getcwd()
-    card_output_directory = current_directory + "/example_cards/"
-    signal = "mPhi_1500"
+    card_output_directory = current_directory + "/example_analysis/" + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
+    #check if output directory exists, if not exit with error
+    if not os.path.exists(card_output_directory):
+       print ("Error: Directory does not exist. Please run create_workspace.py first.")
+       exit()
+
+
+
+    signal = "mPhi%s" % int(opt.mass)
 
     #OOpen workspace
     workfile_name = "param_ws.root"
@@ -128,6 +144,7 @@ def main():
     cardCR_D_file.write(cardCR_D)
     cardCR_D_file.close()
 
+    print ("Datacards created in directory: " + card_output_directory)
 
 
 if __name__ == "__main__":

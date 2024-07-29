@@ -4,6 +4,13 @@
 import ROOT
 from ROOT import RooRealVar, RooDataHist, RooArgList, RooWorkspace, RooParametricHist, RooFit, RooAddition, RooFormulaVar
 import os
+import optparse
+
+#add arguments
+parser = optparse.OptionParser(description="Option parser")
+parser.add_option('-m','--mass', dest='mass',help='Input mass point', default=1500,type=int)
+(opt, args) = parser.parse_args()
+
 
 
 def __get_histograms_regions(process, input_file):
@@ -29,12 +36,28 @@ def __get_histograms_regions(process, input_file):
 #main code starting here
 def main():
 
+    print ("Creating workspace for the analysis with mass point: ", opt.mass)
+
     #get current directory
     current_directory = os.getcwd()
-    card_output_directory = current_directory + "/example_cards/"
-    input_file_bkg = ROOT.TFile.Open(current_directory+ "/generated_histograms/background.root")
-    input_file_sgn = ROOT.TFile.Open(current_directory+ "/generated_histograms/mPhi_1500.root")
-    signal = "mPhi_1500"
+    card_output_directory = current_directory + "/example_analysis/" + "datacards/" + "mPhi%s" % int(opt.mass) + "/"
+    #check if output directory exists, if not create it
+    if not os.path.exists(card_output_directory):
+        os.makedirs(card_output_directory)
+    
+    try:
+        input_file_bkg = ROOT.TFile.Open(current_directory+ "/generated_histograms/background.root")
+    except:
+        print ("Error: Background file does not exist. Please generate first histogram for background.")
+        exit()
+    
+    try:
+        input_file_sgn = ROOT.TFile.Open(current_directory+ "/generated_histograms/mPhi_%s.root"% int(opt.mass))
+    except:
+        print ("Error: Signal file does not exist. Please generate first histogram for mass point %s." % int(opt.mass))
+        exit()
+    
+    signal = "mPhi%s" % int(opt.mass)
 
     #Output file and workspace
     output_file_ws =  ROOT.TFile(card_output_directory+"param_ws.root","RECREATE")
@@ -153,6 +176,8 @@ def main():
     output_file_ws.cd()
     ws.Write()
     output_file_ws.Close()
+
+    print ("Workspace saved in: ", card_output_directory+"param_ws.root")
 
 
 
