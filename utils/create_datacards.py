@@ -118,14 +118,14 @@ def main():
     cardCR_D += "-----------------------------------------------------------------------------------\n"
 
     #add systematics section
-    cardSR_A += "lumi                                    %-43s %-43s\n" % ("--", lumi_sys)
-    cardSR_A += "BkgRate                                 %-43s %-43s\n" % ("--", non_closure_sys)
+    cardSR_A += "lumi      lnN                          %-43s %-43s\n" % ("--", lumi_sys)
+    cardSR_A += "BkgRate      lnN                       %-43s %-43s\n" % ("--", non_closure_sys)
 
-    cardCR_B += "lumi                                    %-43s %-43s\n" % ("--", lumi_sys)
+    cardCR_B += "lumi      lnN                          %-43s %-43s\n" % ("--", lumi_sys)
     
-    cardCR_C += "lumi                                    %-43s %-43s\n" % ("--", lumi_sys)
+    cardCR_C += "lumi       lnN                          %-43s %-43s\n" % ("--", lumi_sys)
 
-    cardCR_D += "lumi                                    %-43s %-43s\n" % ("--", lumi_sys)
+    cardCR_D += "lumi      lnN                          %-43s %-43s\n" % ("--", lumi_sys)
 
     #write datacards in output directory
     cardSR_A_file = open(card_output_directory + signal + "_Catany_2018_SR.txt", "w")

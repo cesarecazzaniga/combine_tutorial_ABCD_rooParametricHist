@@ -133,22 +133,22 @@ def main():
 
 
     #Parametric histogram for control region B (transfering region, to be related via transfer factor to SR)
-    param_hist_B_region = RooParametricHist("Bkg_B", "Background PDF in B region",variable_z,process_B_region_bins,histB_pr)
-    param_Bkg_B_norm = RooAddition("Bkg_B"+"_norm","Total Number of events from background in control region B",process_B_region_bins)
-    getattr(ws, "import")(param_hist_B_region, RooFit.Rename("Bkg_B"))
-    getattr(ws, "import")(param_Bkg_B_norm, RooFit.Rename("Bkg_B"+"_norm"),RooFit.RecycleConflictNodes())
+    param_hist_B_region = RooParametricHist("bkg_B", "Background PDF in B region",variable_z,process_B_region_bins,histB_pr)
+    param_Bkg_B_norm = RooAddition("bkg_B"+"_norm","Total Number of events from background in control region B",process_B_region_bins)
+    getattr(ws, "import")(param_hist_B_region, RooFit.Rename("bkg_B"))
+    getattr(ws, "import")(param_Bkg_B_norm, RooFit.Rename("bkg_B"+"_norm"),RooFit.RecycleConflictNodes())
 
     #Parametric histograms for control regions C (used to compute transfer factor) 
-    param_hist_C_region = RooParametricHist("Bkg_C", "Background PDF in C region",variable_z,process_C_region_bins,histC_pr)
-    param_Bkg_C_norm = RooAddition("Bkg_C"+"_norm","Total Number of events from background in control region C",process_C_region_bins)
-    getattr(ws, "import")(param_hist_C_region, RooFit.Rename("Bkg_C"))
-    getattr(ws, "import")(param_Bkg_C_norm, RooFit.Rename("Bkg_C"+"_norm"),RooFit.RecycleConflictNodes())
+    param_hist_C_region = RooParametricHist("bkg_C", "Background PDF in C region",variable_z,process_C_region_bins,histC_pr)
+    param_Bkg_C_norm = RooAddition("bkg_C"+"_norm","Total Number of events from background in control region C",process_C_region_bins)
+    getattr(ws, "import")(param_hist_C_region, RooFit.Rename("bkg_C"))
+    getattr(ws, "import")(param_Bkg_C_norm, RooFit.Rename("bkg_C"+"_norm"),RooFit.RecycleConflictNodes())
 
     #Parametric histograms for control regions D (used to compute transfer factor)
-    param_hist_D_region = RooParametricHist("Bkg_D", "Background PDF in D region",variable_z,process_D_region_bins,histD_pr)
-    param_Bkg_D_norm = RooAddition("Bkg_D"+"_norm","Total Number of events from background in control region D",process_D_region_bins)
-    getattr(ws, "import")(param_hist_D_region, RooFit.Rename("Bkg_D"))
-    getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename("Bkg_D"+"_norm"),RooFit.RecycleConflictNodes())
+    param_hist_D_region = RooParametricHist("bkg_D", "Background PDF in D region",variable_z,process_D_region_bins,histD_pr)
+    param_Bkg_D_norm = RooAddition("bkg_D"+"_norm","Total Number of events from background in control region D",process_D_region_bins)
+    getattr(ws, "import")(param_hist_D_region, RooFit.Rename("bkg_D"))
+    getattr(ws, "import")(param_Bkg_D_norm, RooFit.Rename("bkg_D"+"_norm"),RooFit.RecycleConflictNodes())
 
     #Relate SR (A) to control region B via transfer factors
     process_AB_region_bins = RooArgList()
@@ -167,10 +167,10 @@ def main():
 
 
     #Create parametric histogram for signal region (A)   
-    param_hist_A_region = RooParametricHist("Bkg_A", "Background PDF in A region",variable_z,process_AB_region_bins,histB_pr)
-    param_bkg_A_norm = RooAddition("Bkg_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
-    getattr(ws, "import")(param_hist_A_region, RooFit.Rename("Bkg_A"))
-    getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename("Bkg_A"+"_norm"),RooFit.RecycleConflictNodes())
+    param_hist_A_region = RooParametricHist("bkg_A", "Background PDF in A region",variable_z,process_AB_region_bins,histB_pr)
+    param_bkg_A_norm = RooAddition("bkg_A"+"_norm","Total Number of events from background in A region",process_AB_region_bins)
+    getattr(ws, "import")(param_hist_A_region, RooFit.Rename("bkg_A"))
+    getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename("bkg_A"+"_norm"),RooFit.RecycleConflictNodes())
 
     #Save workspace in output file
     output_file_ws.cd()
