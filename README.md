@@ -275,6 +275,14 @@ getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename("bkg_A"+"_norm"),RooFit.Re
 ```
 </details>
 
+To run the workspace creation script:
+
+```python utils/create_workspace.py -m 1500```
+
+where ```-m``` is the flag for the mass point you want to run the script on. After running the script, the workspace will be saved in ```example_analysis/datacards/```. To create the datacards automatically fatching the corret workspace, run:
+
+```python utils/create_datacards.py -m 1500```
+
 The datacards can be combined then using the usual command:
 
 ```combineCards.py mPhi1500_*2018*.txt > combinedExclusion_mPhi1500_2018.txt```
