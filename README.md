@@ -8,9 +8,10 @@ In this tutorial we will work with a toy example that could resamble a real phys
 The tutorial has 4 main parts:
 
 1. [Generate input data](#inputs)
-2. [Prepare Combine datacards](#datacards)
-3. [Run fit](#fit)
-4. [Produce limits](#limits)
+2. [RooParametricHist for ABCD method](#rooparametrichist)
+3. [Prepare Combine datacards](#datacards)
+4. [Run fit](#fit)
+5. [Produce limits](#limits)
 
 ## Generate input data
 <a id="inputs"></a>
@@ -24,6 +25,33 @@ The ABCD boundaries are chosen in the example to be $(0.5,0.5)$, and A is define
 To generate your own input data, run: 
 
 ```python utils/produce_input_histograms_and_analyse.py```
+
+## RooParametricHist for ABCD method
+<a id="rooparametrichist"></a>
+In order to prepare the datacards for our ABCD method we will need to pass to the datacards ```shape``` section the histograms of our data in the A,B,C and D regions. 
+Moreover, we will need to relate the bins of our signal region A $N^{bin,i}_{A}$ to the bins of the control regions $N^{bin,i}_{B/C/D}$ via the ABCD method formula $N^{bin,i}_{A} = N^{bin,i}_{B} \cdot TF^{bin,i}$, where the transfer factor is $N^{bin,i}_{C}/N^{bin,i}_{D}$. To achieve our goal, we can use ```RooParametricHist``` implemented in Combine (for further documentation look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). 
+
+A ```RooParametricHist``` is a custom implementation within the ROOT framework, specifically designed for handling parametric histograms in a way that integrates with ROOT's RooFit package. This class extends ```RooAbsPdf```, indicating it's meant to represent a probability density function (PDF) that can be parameterized and manipulated within the RooFit framework (see implentation in Combine [here](https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit/blob/main/interface/RooParametricHist.h)). The idea is that ```RooParametricHist``` allows to define histograms as PDFs where each bin can be either a ```RooRealVar``` or a ```RooFormulaVar```. This is particularly interesting for our use case since, as previously mentioned, we want to relate each bin of our signal region histogram A with the corresponding one of the control regions via the ABCD method formula. 
+
+A ```RooParamtricHist``` can be initialized as follows:
+
+```
+RooParametricHist parametric_hist("paramtric_hist", "Parametric Hist",variable,roo_arg_list_bins,data_th1)
+
+```
+where ```variable``` is a ```RooRealVar``` defining the observable we want to fit, ```roo_arg_list_bins``` is a ```RooArgList``` containing bins defined as ```RooRealVar``` or ```RooFormulaVar``` and ```data_th1``` is a ```TH1``` used to initialize the ```RooParamtricHist```. We remark that it is also possible to define a normalization parameter for the parametric histogram as follows:
+
+```
+RooAddition parametric_hist_norm("paramtric_hist_norm","Total Number of events for Parametric Hist",roo_arg_list_bins)
+
+```
+
+This normalization parameter is relevant for our ABCD method since we would like to know also the total predicted background yield in our Signal Region.
+
+In the following we describe how to build parametric histograms for our ABCD method regions and how to build the worskpace to link to the datacard.
+
+
+
 
 ## Prepare Combine datacards 
 <a id="datacards"></a>
@@ -136,7 +164,7 @@ lumi                lnN                 -                                       
 </details>
 
 As an example, for each datacard, we have assigned a systematic uncertainty of 1.6% due to lumi to the signal processes, and a systematic of 5% to background in the SR (to take into account of non-closure of the method). 
-Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object (for what a RooParametricHist is look [here](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part3/nonstandard/?h=rooparametrichist#rooparametrichist-gamman-for-shapes)). In the following we show how to build the workspace. 
+Notice that each datacard for each region has a ```shapes``` section for the observed data ```data_obs```, for the background ```Bkg``` and for the signal. The signal and data shapes are stored in a workspace ```wspace``` linked to the shapes section in the datacard, while the background shapes are stored in a ```RooParametricHist``` object. In the following we show how to build the workspace. 
 
 We follow the main steps implemented in a working code to create the workspace [create_workspace.py](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/blob/main/utils/create_workspace.py).
 First create a RooWorkspace, implement a function ```__get_histograms_regions``` to read the input histograms from the A,B,C,D regions and import them as ```RooDataHist``` in the workspace.
