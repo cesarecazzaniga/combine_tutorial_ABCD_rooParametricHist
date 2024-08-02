@@ -310,16 +310,25 @@ getattr(ws, "import")(param_bkg_A_norm, RooFit.Rename("bkg_A"+"_norm"),RooFit.Re
 
 To run the workspace creation script:
 
-```python utils/create_workspace.py -m 1500```
+```
+python utils/create_workspace.py -m 1500
+
+```
 
 where ```-m``` is the flag for the mass point you want to run the script on. The script will use by default the histograms stored in ```generated_histograms```. To use the ones that you created, change the path [here](https://github.com/cesarecazzaniga/combine_tutorial_ABCD_rooParametricHist/blob/dc89f99a1c7a1f5705888ae00971176ec35463c5/utils/create_workspace.py#L49).
 After running the script, the workspace will be saved in ```example_analysis/datacards/```. To create the datacards automatically fatching the corret workspace, run:
 
-```python utils/create_datacards.py -m 1500```
+```
+python utils/create_datacards.py -m 1500
+
+```
 
 The datacards can be combined then using the usual command:
 
-```combineCards.py mPhi1500_*2018*.txt > combinedExclusion_mPhi1500_2018.txt```
+```
+combineCards.py mPhi1500_*2018*.txt > combinedExclusion_mPhi1500_2018.txt
+
+```
 
 <details>
 <summary> Datacard with A,B,C,D regions combined  </summary>
@@ -365,7 +374,10 @@ lumi                    lnN     1.016     -         1.016     -         1.016   
 
 From the combined datacard for all the regions, one can run the usual fit diagnostics as follows:
 
-```combine -M FitDiagnostics combinedExclusion_mPhi1500_2018.txt -m 1500 --saveShapes --saveWithUncertainties --saveNormalizations```
+```
+combine -M FitDiagnostics combinedExclusion_mPhi1500_2018.txt -m 1500 --saveShapes --saveWithUncertainties --saveNormalizations
+
+```
 
 Using the output ```higgsCombineTest.FitDiagnostics.mH1500.root```, one can run the script ```utils/mlfitNormsToText.py``` to get the predictions for the normalizations.
 
@@ -396,7 +408,10 @@ Moreover, one can run the script ```utils/postFitPlot.py``` to get pre-fit and p
 
 Limits can be computed from the combined datacard for all the regions using the following command (in case of asymptotic limits):
 
-```combine -M AsymptoticLimits -n combinedExclusion_mPhi1500_2018 -m 1500  combinedExclusion_mPhi1500_2018.txt  2>&1 | tee  asymp_limits_mPhi1500_2018.txt```
+```
+combine -M AsymptoticLimits -n combinedExclusion_mPhi1500_2018 -m 1500  combinedExclusion_mPhi1500_2018.txt  2>&1 | tee  asymp_limits_mPhi1500_2018.txt
+
+```
 
 Both the observed (from nominal Monte Carlo) and the expected limits are computed for each mass point. 
 
